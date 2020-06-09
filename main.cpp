@@ -6,9 +6,8 @@
 #include "song.cpp"
 #include "textdisp.cpp"
 #include "cursor.cpp"
-#include "sdltimer.cpp"
+#include "timer.cpp"
 #include "utils.cpp"
-#include "filedialogue.cpp"
 #include "textmessagebox.cpp"
 #include "foldersearch.cpp"
 #include "multimedia.cpp"
@@ -42,8 +41,6 @@ void output(Song& song, SongInfo& songInfo, int bpm, InstrumentHandler& instrume
 	}
 	wave.write(filename);
 }
-
-#undef main
 
 int main(int argc, char* argv[])//int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

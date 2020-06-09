@@ -1,13 +1,13 @@
 #pragma once
-#include "SDL2/SDL.h"
+#include <windows.h>
+#include <ctime>
 
 class Timer
 {
 private:
-	Uint32 startTime;
+	clock_t startTime;
+	double waitTime;
 public:
-	int framerate;
-
 	Timer(int framerate);
 
 	Timer(const Timer&) = delete;

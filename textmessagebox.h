@@ -2,7 +2,7 @@
 #include "textdisp.cpp"
 #include <string>
 #include <vector>
-#include "sdltimer.cpp"
+#include "timer.cpp"
 #include "textimage.cpp"
 #include "keyboard.cpp"
 
