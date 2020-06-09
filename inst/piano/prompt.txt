@@ -1,0 +1,1 @@
+(sum (mult (hzosc 440) (mult (sum (hzosc 220) 1.25) 0.25)) (mult (hzosc (* 440 8)) 0.05))
