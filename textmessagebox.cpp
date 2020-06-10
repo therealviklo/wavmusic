@@ -13,12 +13,12 @@ namespace TextMessageBoxUtils
 template <typename CharType>
 void TextMessageBox<CharType>::updateText(StringType text)
 {
-	this->text = text;
+	this->text = std::move(text);
 	
 	int textWidth = 0;
 	int rowCount = 1;
 	int currRowWidth = 0;
-	for (auto i = text.begin(); i != text.end(); i++)
+	for (auto i = this->text.begin(); i != this->text.end(); i++)
 	{
 		if (*i == '\n')
 		{
@@ -46,7 +46,7 @@ void TextMessageBox<CharType>::updateText(StringType text)
 	}
 	if (options.size() > 0) buttonRowWidth -= 2;
 	
-	width = TextMessageBoxUtils::max3(textWidth + 6, buttonRowWidth + 6, title.size() + 2);
+	width = TextMessageBoxUtils::max3(textWidth + 6, buttonRowWidth + 6, this->title.size() + 2);
 	height = rowCount + 6;
 }
 
@@ -61,7 +61,7 @@ TextMessageBox<CharType>::TextMessageBox(StringType title, StringType text, std:
 	int textWidth = 0;
 	int rowCount = 1;
 	int currRowWidth = 0;
-	for (auto i = text.begin(); i != text.end(); i++)
+	for (auto i = this->text.begin(); i != this->text.end(); i++)
 	{
 		if (*i == '\n')
 		{
@@ -82,12 +82,12 @@ TextMessageBox<CharType>::TextMessageBox(StringType title, StringType text, std:
 		textWidth = currRowWidth;
 	}
 	int buttonRowWidth = 0;
-	for (auto i = options.begin(); i != options.end(); i++)
+	for (auto i = this->options.begin(); i != this->options.end(); i++)
 	{
 		buttonRowWidth += i->size() + 2;
 	}
-	if (options.size() > 0) buttonRowWidth -= 2;
-	width = TextMessageBoxUtils::max3(textWidth + 6, buttonRowWidth + 6, title.size() + 2);
+	if (this->options.size() > 0) buttonRowWidth -= 2;
+	width = TextMessageBoxUtils::max3(textWidth + 6, buttonRowWidth + 6, this->title.size() + 2);
 	height = rowCount + 6;
 }
 
@@ -318,7 +318,6 @@ std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer&
 	while (true)
 	{
 		timer.start();
-
 
 		if (KB::KB.typed(VK_BACK))
 		{
