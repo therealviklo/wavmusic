@@ -28,5 +28,5 @@
  * - 8 bitar, inget tecken, för spårnumret.
 */ 
 
-void saveSong(const SongData& song, std::string filename);
-SongData loadSong(std::string filename, InstrumentHandler& instruments);
+void saveSong(const SongData& song, const std::string& filename);
+SongData loadSong(const std::string& filename, InstrumentHandler& instruments);

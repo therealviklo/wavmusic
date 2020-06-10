@@ -14,7 +14,7 @@ double songLength(const Song& song)
 	return highestYet;
 }
 
-void Instrument::readEnvelope(std::string name)
+void Instrument::readEnvelope(const std::string& name)
 {
 	File envelopeFile(name + "\\envelope.txt", "r");
 	int c = '\0';
@@ -59,7 +59,7 @@ void Instrument::readEnvelope(std::string name)
 	envelope.release = std::stod(release);
 }
 
-Instrument::Instrument(std::string name)
+Instrument::Instrument(const std::string& name)
 {
 	readEnvelope(name);
 	Wave original = read(name + "\\sample.wav");

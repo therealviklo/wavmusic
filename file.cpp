@@ -57,7 +57,7 @@ T fixSignToSmaller(T number, int numBytes)
 	}
 }
 
-File::File(std::string name, std::string mode)
+File::File(const std::string& name, const std::string& mode)
 {
 	file = fopen(name.c_str(), mode.c_str());
 	if (file == nullptr) throw std::runtime_error("Can't open file");
@@ -178,7 +178,7 @@ void File::writeUnsigned(T number, unsigned int numBytes)
 	}
 }
 
-void File::writeString(std::string string)
+void File::writeString(const std::string& string)
 {
 	for (auto i = string.begin(); i != string.end(); i++)
 	{

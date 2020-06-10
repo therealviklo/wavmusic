@@ -1,9 +1,9 @@
 #pragma once
 #include "multimedia.h"
 
-Sound::Sound(std::string path, std::string alias)
+Sound::Sound(const std::string& path, std::string alias)
 {
-	this->name = alias;
+	this->name = std::move(alias);
 	if (name != "")
 	{
 		std::string command = "open \"" + path + "\" type waveaudio alias \"" + alias + "\"";
@@ -74,7 +74,7 @@ Sound::operator bool()
 
 namespace MM
 {
-	void playSound(std::string filename, double timestamp)
+	void playSound(const std::string& filename, double timestamp)
 	{
 		stopSound();
 		currentlyPlaying = std::make_unique<Sound>(filename, filename);

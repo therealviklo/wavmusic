@@ -69,7 +69,7 @@ int32_t Wave::at(int channel, double time)
 	return channels.at(channel)[int(time*samplingRate)] + (time*samplingRate - int(time*samplingRate))*(channels.at(channel)[int(time*samplingRate)+1] - channels.at(channel)[int(time*samplingRate)]);
 }
 
-void Wave::write(std::string filename, int numBytes)
+void Wave::write(const std::string& filename, int numBytes)
 {
 	File file(filename, "wb");
 
@@ -192,7 +192,7 @@ Wave Wave::changeSpeed(double factor)
 	return wave;
 }
 
-Wave read(std::string filename)
+Wave read(const std::string& filename)
 {
 	File file(filename, "rb");
 

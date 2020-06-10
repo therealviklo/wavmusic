@@ -53,9 +53,9 @@ void TextMessageBox<CharType>::updateText(StringType text)
 template <typename CharType>
 TextMessageBox<CharType>::TextMessageBox(StringType title, StringType text, std::vector<StringType> options, int defaultOption)
 {
-	this->title = title;
-	this->text = text;
-	this->options = options;
+	this->title = std::move(title);
+	this->text = std::move(text);
+	this->options = std::move(options);
 	selectedOption = defaultOption;
 
 	int textWidth = 0;
@@ -226,7 +226,7 @@ void TextMessageBox<CharType>::updateCursorPos(bool leftPressed, bool rightPress
 template <>
 TextInputBox<char>::TextInputBox(StringType title)
 	: TextMessageBox<char>(
-		title,
+		std::move(title),
 		"",
 		{"OK"}
 	)
@@ -236,7 +236,7 @@ TextInputBox<char>::TextInputBox(StringType title)
 template <>
 TextInputBox<wchar_t>::TextInputBox(StringType title)
 	: TextMessageBox<wchar_t>(
-		title,
+		std::move(title),
 		L"",
 		{L"OK"}
 	)
@@ -261,7 +261,7 @@ void TextInputBox<CharType>::removeCharacter()
 
 int promptTextMessageBoxA437(std::string title, std::string text, std::vector<std::string> options, Textdisp& textdisp, Timer& timer, int defaultOption)
 {
-	TextMessageBoxA textMessageBox(title, text, options);
+	TextMessageBoxA textMessageBox(std::move(title), std::move(text), std::move(options));
 	TextImage coveredArea(
 		textdisp, 
 		textMessageBox.getX(textdisp), 
@@ -306,7 +306,7 @@ void addCharacterAndRemoveBoxA(int c, std::unique_ptr<TextImage>& coveredArea, T
 
 std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer& timer)
 {
-	TextInputBoxA textInputBox(title);
+	TextInputBoxA textInputBox(std::move(title));
 	std::unique_ptr<TextImage> coveredArea = std::make_unique<TextImage>(
 		textdisp, 
 		textInputBox.getX(textdisp), 

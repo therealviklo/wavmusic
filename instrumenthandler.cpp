@@ -1,13 +1,13 @@
 #pragma once
 #include "instrumenthandler.h"
 
-Instrument& InstrumentHandler::operator[](std::string name)
+Instrument& InstrumentHandler::operator[](const std::string& name)
 {
 	add(name);
 	return *instruments.at(name);
 }
 
-void InstrumentHandler::add(std::string name)
+void InstrumentHandler::add(const std::string& name)
 {
 	if (!instruments.count(name))
 	{

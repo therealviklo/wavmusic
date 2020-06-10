@@ -1,7 +1,7 @@
 #pragma once
 #include "songfile.h"
 
-void saveSong(const SongData& sd, std::string filename)
+void saveSong(const SongData& sd, const std::string& filename)
 {
 	File file(filename, "wb");
 
@@ -37,7 +37,7 @@ void saveSong(const SongData& sd, std::string filename)
 	}
 }
 
-SongData loadSong(std::string filename, InstrumentHandler& instruments)
+SongData loadSong(const std::string& filename, InstrumentHandler& instruments)
 {
 	File file(filename, "rb");
 	SongData sd;

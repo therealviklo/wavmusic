@@ -24,9 +24,9 @@ Box Menu::getCoveredArea(int x, int y)
 	return {x + xOffset, y + 1, x + xOffset + width, y + 1 + (int)options.at(menuSelectedOption).second.size()};
 }
 
-Menu::Menu(const options_t& options)
+Menu::Menu(options_t options)
 {
-	this->options = options;
+	this->options = std::move(options);
 	menuSelectedOption = 0;
 	listSelectedOption = 0;
 	isInMenu = false;

@@ -7,6 +7,6 @@ class InstrumentHandler
 private:
 	std::map<std::string, std::unique_ptr<Instrument>> instruments;
 public:
-	Instrument& operator[](std::string name);
-	void add(std::string name);
+	Instrument& operator[](const std::string& name);
+	void add(const std::string& name);
 };

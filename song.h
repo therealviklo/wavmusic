@@ -32,9 +32,9 @@ private:
 	std::unique_ptr<Wave> sounds[9*12];
 	Envelope envelope;
 
-	void readEnvelope(std::string name);
+	void readEnvelope(const std::string& name);
 public:
-	Instrument(std::string name);
+	Instrument(const std::string& name);
 	Instrument(Wave& wave, Envelope envelope);
 
 	Instrument(const Instrument&) = delete;

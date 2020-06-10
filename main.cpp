@@ -17,7 +17,7 @@
 #include "instrumenthandler.cpp"
 #include "songdata.cpp"
 
-const char defaultInstrument[] = "shamesque";
+const char* defaultInstrument = "shamesque";
 
 template <typename T>
 bool elementInList(const T& t, const std::list<T>& list)
@@ -32,7 +32,7 @@ bool elementInList(const T& t, const std::list<T>& list)
 	return false;
 }
 
-void output(Song& song, SongInfo& songInfo, int bpm, InstrumentHandler& instruments, std::string filename)
+void output(Song& song, SongInfo& songInfo, int bpm, InstrumentHandler& instruments, const std::string& filename)
 {
 	Wave wave(1, 48000, 48000 * songLength(song) * 240.0 / bpm);
 	for (auto i = song.begin(); i != song.end(); i++)
@@ -42,7 +42,7 @@ void output(Song& song, SongInfo& songInfo, int bpm, InstrumentHandler& instrume
 	wave.write(filename);
 }
 
-int main(int argc, char* argv[])//int __stdcall WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+int main(int argc, char* argv[])
 {
 	try
 	{

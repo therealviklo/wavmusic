@@ -27,7 +27,7 @@ private:
 
 	Box getCoveredArea(int x, int y);
 public:
-	Menu(const options_t& options);
+	Menu(options_t options);
 
 	bool inMenu() {return isInMenu;}
 

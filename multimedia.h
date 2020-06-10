@@ -11,7 +11,7 @@ private:
 	std::string name;
 public:
 	Sound() {name = "";}
-	Sound(std::string path, std::string alias);
+	Sound(const std::string& path, std::string alias);
 	Sound(Sound&& o);
 	~Sound();
 
@@ -31,7 +31,7 @@ namespace MM
 {
 	std::unique_ptr<Sound> currentlyPlaying;
 
-	void playSound(std::string filename, double timestamp = 0);
+	void playSound(const std::string& filename, double timestamp = 0);
 	void stopSound();
 	bool isPlaying();
 }

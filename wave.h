@@ -24,7 +24,7 @@ public:
 
 	int32_t at(int channel, double time);
 
-	void write(std::string filename, int numBytes = 2);
+	void write(const std::string& filename, int numBytes = 2);
 
 	void add(Wave& o, double time = 0);
 	void copy(Wave& o, double time = 0);
@@ -33,4 +33,4 @@ public:
 	Wave changeSpeed(double factor);
 };
 
-Wave read(std::string filename);
+Wave read(const std::string& filename);

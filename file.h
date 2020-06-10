@@ -20,7 +20,7 @@ class File
 private:
 	FILE* file;
 public:
-	File(std::string name, std::string mode);
+	File(const std::string& name, const std::string& mode);
 	~File();
 
 	File(const File&) = delete;
@@ -38,7 +38,7 @@ public:
 	void write(T number, unsigned int numBytes = sizeof(T));
 	template <typename T, bool littleEndian = false>
 	void writeUnsigned(T number, unsigned int numBytes = sizeof(T));
-	void writeString(std::string string);
+	void writeString(const std::string& string);
 
 	void skip(unsigned int bytes);
 };
