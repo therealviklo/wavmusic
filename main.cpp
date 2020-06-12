@@ -102,7 +102,14 @@ int main(int argc, char* argv[])
 		
 		int currentTrack = 0;
 		std::list<Song::iterator> selectedNotes;
-		std::unique_ptr<Point> boxSelectStart;
+		struct {
+			std::unique_ptr<Point> startPoint;
+			enum {
+				AB_NULL = 0,
+				AB_SHIFT,
+				AB_B
+			} activatedBy;
+		} boxSelect = {};
 
 		// Wave defaultInstrumentWave(1, 48000, 48000*10, false);
 		// for (int i = 0; i < defaultInstrumentWave.getLength(); i++)
@@ -191,26 +198,50 @@ int main(int argc, char* argv[])
 					(**i).timestamp += 1.0 / sd.raster;
 				}
 			}
-			if (textinp.pressed(VK_SHIFT) && !boxSelectStart)
+			if (!boxSelect.startPoint)
 			{
-				if (!boxSelectStart)
+				bool shiftPressed = textinp.pressed(VK_SHIFT);
+				bool bPressed = textinp.pressed('B');
+				if (shiftPressed || bPressed)
 				{
-					boxSelectStart = std::make_unique<Point>();
+					if (!boxSelect.startPoint)
+					{
+						boxSelect.startPoint = std::make_unique<Point>();
+					}
+					boxSelect.startPoint->x = cursor.x + horizontalScroll;
+					boxSelect.startPoint->y = pianoRollBox.bottom - cursor.y + verticalScroll;
+					selectedNotes.clear();
+					if (shiftPressed)
+					{
+						boxSelect.activatedBy = boxSelect.AB_SHIFT;
+					}
+					else if (bPressed)
+					{
+						boxSelect.activatedBy = boxSelect.AB_B;
+					}
+					else //???
+					{
+						boxSelect.activatedBy = boxSelect.AB_NULL;
+					}
 				}
-				boxSelectStart->x = cursor.x + horizontalScroll;
-				boxSelectStart->y = pianoRollBox.bottom - cursor.y + verticalScroll;
-				selectedNotes.clear();
 			}
-			if (!textinp.down(VK_SHIFT) && boxSelectStart)
+			if (
+				boxSelect.startPoint &&
+				(
+					boxSelect.activatedBy == boxSelect.AB_NULL ||
+					(boxSelect.activatedBy == boxSelect.AB_SHIFT && !textinp.down(VK_SHIFT)) ||
+					(boxSelect.activatedBy == boxSelect.AB_B && textinp.pressed('B'))
+				)
+			)
 			{
 				for (auto i = sd.song.begin(); i != sd.song.end(); i++)
 				{
 					if (i->track == currentTrack)
 					{
-						int minX = min(cursor.x + horizontalScroll, boxSelectStart->x);
-						int maxX = max(cursor.x + horizontalScroll, boxSelectStart->x);
-						int minY = min(pianoRollBox.bottom - cursor.y + verticalScroll, boxSelectStart->y);
-						int maxY = max(pianoRollBox.bottom - cursor.y + verticalScroll, boxSelectStart->y);
+						int minX = min(cursor.x + horizontalScroll, boxSelect.startPoint->x);
+						int maxX = max(cursor.x + horizontalScroll, boxSelect.startPoint->x);
+						int minY = min(pianoRollBox.bottom - cursor.y + verticalScroll, boxSelect.startPoint->y);
+						int maxY = max(pianoRollBox.bottom - cursor.y + verticalScroll, boxSelect.startPoint->y);
 						if (
 							i->tone >= minY &&
 							i->tone <= maxY &&
@@ -240,7 +271,7 @@ int main(int argc, char* argv[])
 						}
 					}
 				}
-				boxSelectStart.reset();
+				boxSelect.startPoint.reset();
 			}
 			if (textinp.typed(VK_UP))
 			{
@@ -524,12 +555,12 @@ int main(int argc, char* argv[])
 			}
 
 			//ritar rektangelmarkering
-			if (boxSelectStart)
+			if (boxSelect.startPoint)
 			{
-				int minX = min(cursor.x, boxSelectStart->x - horizontalScroll);
-				int maxX = max(cursor.x, boxSelectStart->x - horizontalScroll);
-				int minY = min(cursor.y, pianoRollBox.bottom - (boxSelectStart->y - verticalScroll));
-				int maxY = max(cursor.y, pianoRollBox.bottom - (boxSelectStart->y - verticalScroll));
+				int minX = min(cursor.x, boxSelect.startPoint->x - horizontalScroll);
+				int maxX = max(cursor.x, boxSelect.startPoint->x - horizontalScroll);
+				int minY = min(cursor.y, pianoRollBox.bottom - (boxSelect.startPoint->y - verticalScroll));
+				int maxY = max(cursor.y, pianoRollBox.bottom - (boxSelect.startPoint->y - verticalScroll));
 				for (int i = minY; i <= maxY; i++)
 				{
 					for (int j = minX; j <= maxX; j++)
