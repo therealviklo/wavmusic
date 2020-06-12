@@ -89,22 +89,23 @@ MenuResult Menu::enterMenu(int x, int y, Textdisp& textdisp, Timer& timer)
 			coveredBox.right - coveredBox.left,
 			coveredBox.bottom - coveredBox.top
 		);
+		Textinp textinp;
 
 		while (true)
 		{
 			timer.start();
 
-			if (KB::KB.pressed(VK_MENU))
+			if (textinp.pressed(VK_MENU) || textinp.pressed('M'))
 			{
 				isInMenu = false;
 				return {false, "", ""};
 			}
-			if (KB::KB.pressed(VK_RETURN))
+			if (textinp.pressed(VK_RETURN))
 			{
 				isInMenu = false;
 				return {true, options.at(menuSelectedOption).first, options.at(menuSelectedOption).second.at(listSelectedOption)};
 			}
-			if (moveCursor(KB::KB.typed('W') | KB::KB.typed(VK_UP), KB::KB.typed('A') | KB::KB.typed(VK_LEFT), KB::KB.typed('S') | KB::KB.typed(VK_DOWN), KB::KB.typed('D') | KB::KB.typed(VK_RIGHT)))
+			if (moveCursor(textinp.typed('W') | textinp.typed(VK_UP), textinp.typed('A') | textinp.typed(VK_LEFT), textinp.typed('S') | textinp.typed(VK_DOWN), textinp.typed('D') | textinp.typed(VK_RIGHT)))
 			{
 				if (coveredArea)
 				{

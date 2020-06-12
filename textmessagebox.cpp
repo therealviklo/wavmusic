@@ -261,12 +261,13 @@ void TextInputBox<CharType>::removeCharacter()
 
 int promptTextMessageBoxA437(std::string title, std::string text, std::vector<std::string> options, Textdisp& textdisp, Timer& timer, int defaultOption)
 {
+	Textinp textinp;
 	TextMessageBoxA textMessageBox(std::move(title), std::move(text), std::move(options));
 	TextImage coveredArea(
-		textdisp, 
-		textMessageBox.getX(textdisp), 
-		textMessageBox.getY(textdisp), 
-		textMessageBox.getWidth(), 
+		textdisp,
+		textMessageBox.getX(textdisp),
+		textMessageBox.getY(textdisp),
+		textMessageBox.getWidth(),
 		textMessageBox.getHeight()
 	);
 
@@ -274,9 +275,9 @@ int promptTextMessageBoxA437(std::string title, std::string text, std::vector<st
 	{
 		timer.start();
 
-		textMessageBox.updateCursorPos(KB::KB.pressed('A') | KB::KB.pressed(VK_LEFT), KB::KB.pressed('D') | KB::KB.pressed(VK_RIGHT));
+		textMessageBox.updateCursorPos(textinp.pressed('A') | textinp.pressed(VK_LEFT), textinp.pressed('D') | textinp.pressed(VK_RIGHT));
 
-		if (KB::KB.pressed(VK_RETURN))
+		if (textinp.pressed(VK_RETURN))
 		{
 			break;
 		}
@@ -306,6 +307,7 @@ void addCharacterAndRemoveBoxA(int c, std::unique_ptr<TextImage>& coveredArea, T
 
 std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer& timer)
 {
+	Textinp textinp;
 	TextInputBoxA textInputBox(std::move(title));
 	std::unique_ptr<TextImage> coveredArea = std::make_unique<TextImage>(
 		textdisp, 
@@ -319,7 +321,7 @@ std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer&
 	{
 		timer.start();
 
-		if (KB::KB.typed(VK_BACK))
+		if (textinp.typed(VK_BACK))
 		{
 			coveredArea->draw(textdisp, textInputBox.getX(textdisp), textInputBox.getY(textdisp));
 			textInputBox.removeCharacter();
@@ -331,38 +333,38 @@ std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer&
 				textInputBox.getHeight()
 			);
 		}
-		if (KB::KB.typed(VK_OEM_PLUS))
+		if (textinp.typed(VK_OEM_PLUS))
 		{
 			addCharacterAndRemoveBoxA('+', coveredArea, textdisp, textInputBox);
 		}
-		if (KB::KB.typed(VK_OEM_MINUS))
+		if (textinp.typed(VK_OEM_MINUS))
 		{
 			addCharacterAndRemoveBoxA('-', coveredArea, textdisp, textInputBox);
 		}
-		if (KB::KB.typed(VK_OEM_PERIOD))
+		if (textinp.typed(VK_OEM_PERIOD))
 		{
 			addCharacterAndRemoveBoxA('.', coveredArea, textdisp, textInputBox);
 		}
-		if (KB::KB.typed(VK_OEM_COMMA))
+		if (textinp.typed(VK_OEM_COMMA))
 		{
 			addCharacterAndRemoveBoxA(',', coveredArea, textdisp, textInputBox);
 		}
-		if (KB::KB.typed(VK_SPACE))
+		if (textinp.typed(VK_SPACE))
 		{
 			addCharacterAndRemoveBoxA(' ', coveredArea, textdisp, textInputBox);
 		}
 		for (int c = '0'; c <= '9'; c++)
 		{
-			if (KB::KB.typed(c))
+			if (textinp.typed(c))
 			{
 				addCharacterAndRemoveBoxA(c, coveredArea, textdisp, textInputBox);
 			}
 		}
-		if (KB::KB.down(VK_SHIFT) != KB::KB.capsToggled())
+		if (textinp.down(VK_SHIFT) != textinp.capsToggled())
 		{
 			for (int c = 'A'; c <= 'Z'; c++)
 			{
-				if (KB::KB.typed(c))
+				if (textinp.typed(c))
 				{
 					addCharacterAndRemoveBoxA(c, coveredArea, textdisp, textInputBox);
 				}
@@ -372,13 +374,13 @@ std::string promptTextInputBoxA437(std::string title, Textdisp& textdisp, Timer&
 		{
 			for (int c = 'A'; c <= 'Z'; c++)
 			{
-				if (KB::KB.typed(c))
+				if (textinp.typed(c))
 				{
 					addCharacterAndRemoveBoxA(c - ('A' - 'a'), coveredArea, textdisp, textInputBox);
 				}
 			}
 		}
-		if (KB::KB.pressed(VK_RETURN))
+		if (textinp.pressed(VK_RETURN))
 		{
 			break;
 		}

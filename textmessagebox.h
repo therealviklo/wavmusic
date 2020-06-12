@@ -1,10 +1,9 @@
 #pragma once
-#include "textdisp.cpp"
 #include <string>
 #include <vector>
 #include "timer.cpp"
 #include "textimage.cpp"
-#include "keyboard.cpp"
+#include "textdisp.cpp"
 
 template <typename CharType>
 class TextMessageBox

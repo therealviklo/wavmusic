@@ -40,7 +40,7 @@ void Textinp::update()
 						keys[events[i].Event.KeyEvent.wVirtualKeyCode].pressed = true;
 					}
 					keys[events[i].Event.KeyEvent.wVirtualKeyCode].down = events[i].Event.KeyEvent.bKeyDown;
-					keys[events[i].Event.KeyEvent.wVirtualKeyCode].typed = //raden var för lång
+					keys[events[i].Event.KeyEvent.wVirtualKeyCode].typed =
 						keys[events[i].Event.KeyEvent.wVirtualKeyCode].typed || events[i].Event.KeyEvent.bKeyDown;
 				}
 				break;

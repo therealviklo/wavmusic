@@ -3,7 +3,6 @@
 #include "textdisp.cpp"
 #include "textimage.cpp"
 #include "timer.cpp"
-#include "keyboard.cpp"
 #include <vector>
 #include <string>
 #include <memory>

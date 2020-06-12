@@ -12,7 +12,6 @@
 #include "foldersearch.cpp"
 #include "multimedia.cpp"
 #include "menu.cpp"
-#include "keyboard.cpp"
 #include "songfile.cpp"
 #include "instrumenthandler.cpp"
 #include "songdata.cpp"
@@ -51,6 +50,7 @@ int main(int argc, char* argv[])
 		Timer timer(60);
 
 		Textdisp textdisp;
+		Textinp textinp;
 		bool running = true;
 
 		Box pianoRollBox = {0, 1, textdisp.getWidth() - 1, textdisp.getHeight() - 1};
@@ -60,7 +60,8 @@ int main(int argc, char* argv[])
 				{
 					"Export",
 					"Save",
-					"Load"
+					"Load",
+					"Exit"
 				}
 			},
 			{
@@ -114,12 +115,12 @@ int main(int argc, char* argv[])
 			timer.start();
 
 			//input
-			if (KB::KB.pressed('X'))
+			if (textinp.pressed('X'))
 			{
 				running = false;
 				break;
 			}
-			MoveData pressedKeys = {KB::KB.typed('W'), KB::KB.typed('A'), KB::KB.typed('S'), KB::KB.typed('D')};
+			MoveData pressedKeys = {textinp.typed('W'), textinp.typed('A'), textinp.typed('S'), textinp.typed('D')};
 			MoveData actualMoveDirections = cursor.move(pressedKeys);
 			if (actualMoveDirections.w)
 			{
@@ -190,7 +191,7 @@ int main(int argc, char* argv[])
 					(**i).timestamp += 1.0 / sd.raster;
 				}
 			}
-			if (KB::KB.pressed(VK_SHIFT) && !boxSelectStart)
+			if (textinp.pressed(VK_SHIFT) && !boxSelectStart)
 			{
 				if (!boxSelectStart)
 				{
@@ -200,7 +201,7 @@ int main(int argc, char* argv[])
 				boxSelectStart->y = pianoRollBox.bottom - cursor.y + verticalScroll;
 				selectedNotes.clear();
 			}
-			if (!KB::KB.down(VK_SHIFT) && boxSelectStart)
+			if (!textinp.down(VK_SHIFT) && boxSelectStart)
 			{
 				for (auto i = sd.song.begin(); i != sd.song.end(); i++)
 				{
@@ -241,7 +242,7 @@ int main(int argc, char* argv[])
 				}
 				boxSelectStart.reset();
 			}
-			if (KB::KB.typed(VK_UP))
+			if (textinp.typed(VK_UP))
 			{
 				if (currentTrack + 1 < sd.songInfo.size())
 				{
@@ -264,7 +265,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			if (KB::KB.typed(VK_DOWN))
+			if (textinp.typed(VK_DOWN))
 			{
 				if (currentTrack > 0)
 				{
@@ -275,7 +276,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			if (KB::KB.typed(VK_LEFT))
+			if (textinp.typed(VK_LEFT))
 			{
 				for (auto i = selectedNotes.begin(); i != selectedNotes.end(); i++)
 				{
@@ -285,14 +286,14 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			if (KB::KB.typed(VK_RIGHT))
+			if (textinp.typed(VK_RIGHT))
 			{
 				for (auto i = selectedNotes.begin(); i != selectedNotes.end(); i++)
 				{
 					(**i).duration += 1.0 / sd.raster;
 				}
 			}
-			if (KB::KB.pressed(VK_RETURN))
+			if (textinp.pressed(VK_RETURN))
 			{
 				if (selectedNotes.size() > 0)
 				{
@@ -313,13 +314,13 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			if (KB::KB.pressed(VK_SPACE))
+			if (textinp.pressed(VK_SPACE))
 			{
 				sd.song.push_front({pianoRollBox.bottom - cursor.y + verticalScroll, (cursor.x + horizontalScroll) / (double)sd.raster, 1.0 / sd.raster, currentTrack});
 				selectedNotes.clear();
 				selectedNotes.push_back(sd.song.begin());
 			}
-			if (KB::KB.pressed(VK_BACK))
+			if (textinp.pressed(VK_BACK))
 			{
 				for (auto i = selectedNotes.begin(); i != selectedNotes.end(); i++)
 				{
@@ -327,14 +328,14 @@ int main(int argc, char* argv[])
 				}
 				selectedNotes.clear();
 			}
-			if (KB::KB.pressed('C'))
+			if (textinp.pressed('C'))
 			{
 				for (auto i = selectedNotes.begin(); i != selectedNotes.end(); i++)
 				{
 					sd.song.push_front(**i);
 				}
 			}
-			if (KB::KB.pressed('K'))
+			if (textinp.pressed('K'))
 			{
 				try
 				{
@@ -357,7 +358,7 @@ int main(int argc, char* argv[])
 					promptTextMessageBoxA437("Error when playing song", "Unknown error when playing song", {"OK"}, textdisp, timer);
 				}
 			}
-			if (KB::KB.pressed(VK_MENU))
+			if (textinp.pressed(VK_MENU) || textinp.pressed('M'))
 			{
 				MenuResult menuResult = menu.enterMenu(0, 0, textdisp, timer);
 				if (menuResult.successful)
@@ -405,6 +406,11 @@ int main(int argc, char* argv[])
 								inputFilename += ".cme";
 							}
 							sd = loadSong(".\\cme\\" + inputFilename, instruments);
+						}
+						else if (menuResult.option == "Exit")
+						{
+							running = false;
+							break;
 						}
 					}
 					else if (menuResult.menu == "Song")
@@ -471,7 +477,7 @@ int main(int argc, char* argv[])
 					}
 				}
 			}
-			if (KB::KB.pressed(VK_HOME))
+			if (textinp.pressed(VK_HOME))
 			{
 				horizontalScroll = 0;
 				cursor.x = pianoRollBox.left;
